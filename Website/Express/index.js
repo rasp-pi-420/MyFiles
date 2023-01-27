@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 5000
 const fs = require("fs")
+const { rawListeners } = require('process')
 const fileName = 'data.txt'
 const minLineLength = 1
 const { readLastLines, readLastLinesEnc } = require("read-last-lines-ts")
@@ -12,6 +13,25 @@ function CheckIfHasText(text) {
     console.log(HasText.line)
     return HasText.includes(text)
 }
+
+
+
+function AddBlackListedHWID(HWID) {
+  var HWID = HWID.replace(":","")
+  fs.appendFile('BlacklistedHWIDs.txt', `${HWID}\n`, function (err) {
+    if (err) throw err;
+    
+    console.log('Saved!');
+  });
+}
+
+app.get('/api/addBlacklist/:HWID',(req,res) => {
+  var HWID = req.params.HWID.replace(":","")
+  fs.appendFile('BlacklistedHWIDs.txt', `${HWID}\n`, function (err) {
+    if (err) throw err;
+    res.send("Saved!")
+  });
+})
 
 
 app.get('/', (req, res) => {
@@ -111,13 +131,20 @@ app.get('/', (req, res) => {
    <script>
   
     function IDblacklist(){
-      document.getElementById("IDBlacklist").innerText = "Blacklisted"
-      setTimeout(ChangeNameIDBlacklist,5000)
+
+      console.log(${CheckIfHasText("f")})
+      
     }
     
     function HWIDBlacklist(){
       document.getElementById("HWIDBlacklist").innerText = "Blacklisted"
       setTimeout(ChangeNameHWIDBlacklist,5000)
+      
+      async function fillTheTitle() {
+        const post = await fetch("https://jsonplaceholder.typicode.com/posts/1").then((res) => res.json());
+        document.getElementById("HWIDBlacklist").innerText = post.title;
+      }
+      fillTheTitle();
     }
     function IPBlacklist(){
       document.getElementById("IPBlacklist").innerText = "Blacklisted"
@@ -149,7 +176,7 @@ app.get('/', (req, res) => {
       <br>
       <card>
       <h4>HWID Blacklist</h4>
-      <input type="text" id="ammount" style="width: 400px;" placeholder="00000000-0000-0000-0000-000000000000" ></input>
+      <input type="text" id="HWID" style="width: 400px;" placeholder="00000000-0000-0000-0000-000000000000" ></input>
       <br>
       <br>
       <button class="colored" id="HWIDBlacklist" style="background-color: var(--accent-negative-default)" onclick="HWIDBlacklist()">Blacklist</button>
@@ -177,4 +204,7 @@ app.get('/', (req, res) => {
     
     `)
   })
-  
+  app.listen(port, () => {
+    console.log(`Example app listening on port localhost:${port}`)
+    console.log(CheckIfHasText(","))
+})
