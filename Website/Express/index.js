@@ -29,7 +29,7 @@ app.get('/api/addBlacklist/:HWID',(req,res) => {
   var HWID = req.params.HWID.replace(":","")
   fs.appendFile('BlacklistedHWIDs.txt', `${HWID}\n`, function (err) {
     if (err) throw err;
-    res.send("Saved!")
+    
   });
 })
 
@@ -141,7 +141,10 @@ app.get('/', (req, res) => {
       setTimeout(ChangeNameHWIDBlacklist,5000)
       
       async function fillTheTitle() {
-        const post = await fetch("https://jsonplaceholder.typicode.com/posts/1").then((res) => res.json());
+        console.log(document.getElementById("HWID").value)
+        var b = window.location.hostname
+        var b = b.replace("localhost","")
+        const post = await fetch(b+"/api/addBlacklist/:"+document.getElementById("HWID").value).then((res) => res.json());
         document.getElementById("HWIDBlacklist").innerText = post.title;
       }
       fillTheTitle();
