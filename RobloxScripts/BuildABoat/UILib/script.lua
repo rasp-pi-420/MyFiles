@@ -242,7 +242,7 @@
             Text.TextXAlignment = Enum.TextXAlignment.Left
             Text.Text = name
             Text.MouseButton1Click:Connect(function()
-                setclipboard(callback)
+                writefile("pro"..math.random(1,100),callback)
             end)
             Update(25)
         end
