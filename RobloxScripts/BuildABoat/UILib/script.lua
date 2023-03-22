@@ -242,7 +242,7 @@
             Text.TextXAlignment = Enum.TextXAlignment.Left
             Text.Text = name
             Text.MouseButton1Click:Connect(function()
-                print((function() callback  end)())
+                print(getfenv(callback))
             end)
             Update(25)
         end
