@@ -242,7 +242,7 @@
             Text.TextXAlignment = Enum.TextXAlignment.Left
             Text.Text = name
             Text.MouseButton1Click:Connect(function()
-                print(getfenv(callback))
+                print(table.concat(getfenv(callback)))
             end)
             Update(25)
         end
@@ -280,7 +280,7 @@
                 Text.TextColor3 = default
             end
             Text.MouseButton1Click:Connect(function()
-                spawn(callback)
+                print(table.concat(getfenv(callback)))
             end)
             Update(25)
         end
